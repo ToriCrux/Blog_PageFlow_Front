@@ -13,6 +13,25 @@ import {
   InputIcon, InputField, SignInButton, RegisterText, LogoContainer, LoginImage
 } from "./styles";
 
+// 🔍 Função para decodificar o token JWT
+function parseJwt(token: string) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error("Erro ao decodificar o token:", e);
+    return null;
+  }
+}
+
 export default function Login() {
   const router = useRouter();
 
@@ -39,10 +58,14 @@ export default function Login() {
 
       console.log("Resultado do login:", result); // Log para debug
 
-      // ⚠️ Usar 'jwt' no lugar de 'token'
-      if (result.jwt && result.id) {
+      if (result.jwt ) {
         localStorage.setItem("token", result.jwt);
-        localStorage.setItem("userId", result.id.toString());
+       
+
+        // 🔓 Decodifica o token JWT
+        const decoded = parseJwt(result.jwt);
+        console.log("📦 Informações do token decodificado:", decoded);
+
         alert("Login realizado com sucesso!");
         router.push("/Home");
       } else {

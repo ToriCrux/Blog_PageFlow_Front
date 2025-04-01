@@ -5,7 +5,6 @@ export interface LoginPayload {
 
 export interface LoginResponse {
   jwt: string;
-  id: number;
 }
 
 
