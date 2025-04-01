@@ -1,13 +1,17 @@
-// apiServiceLogin.ts
-
 export interface LoginPayload {
   email: string;
   password: string;
 }
 
+export interface LoginResponse {
+  jwt: string;
+  id: number;
+}
+
+
 const API_BASE_URL = "http://localhost:8080";
 
-export const loginUsuario = async (payload: LoginPayload) => {
+export const loginUsuario = async (payload: LoginPayload): Promise<LoginResponse> => {
   try {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: "POST",
@@ -23,12 +27,6 @@ export const loginUsuario = async (payload: LoginPayload) => {
     }
 
     const result = await response.json();
-
-    
-    if (result.token) {
-      localStorage.setItem("token", result.token);
-    }
-
     return result;
 
   } catch (error: any) {

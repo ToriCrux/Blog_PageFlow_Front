@@ -3,37 +3,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-
 import { loginUsuario } from "./apiServiceLogin";
 
-import { 
-  Container, 
-  LeftSection, 
-  RightSection, 
-  Phrase, 
-  SignInContainer, 
-  Title, 
-  Subtitle, 
-  ButtonGroup, 
-  Button, 
-  Divider, 
-  Line, 
-  OrText, 
-  TitleGroup,
-  InputGroup,
-  InputContainer,
-  InputIcon,
-  InputField,
-  SignInButton,
-  RegisterText,
-  LogoContainer,
-  LoginImage
+import {
+  Container, LeftSection, RightSection, Phrase, SignInContainer, Title, Subtitle,
+  ButtonGroup, Button, Divider, Line, OrText, TitleGroup, InputGroup, InputContainer,
+  InputIcon, InputField, SignInButton, RegisterText, LogoContainer, LoginImage
 } from "./styles";
 
 export default function Login() {
-  const router = useRouter(); 
+  const router = useRouter();
 
   const [form, setForm] = useState({
     email: "",
@@ -56,12 +37,17 @@ export default function Login() {
         password: form.password
       });
 
-      if (result.token) {
-        localStorage.setItem("token", result.token);
-      }
+      console.log("Resultado do login:", result); // Log para debug
 
-      alert("Login realizado com sucesso!");
-      router.push("/Home"); 
+      // ⚠️ Usar 'jwt' no lugar de 'token'
+      if (result.jwt && result.id) {
+        localStorage.setItem("token", result.jwt);
+        localStorage.setItem("userId", result.id.toString());
+        alert("Login realizado com sucesso!");
+        router.push("/Home");
+      } else {
+        throw new Error("Token ou ID não recebido do servidor.");
+      }
 
     } catch (error: any) {
       alert("Erro: " + error.message);
@@ -72,29 +58,14 @@ export default function Login() {
     <Container>
       <LeftSection>
         <LoginImage>
-          <Image 
-            src="/Login.svg" 
-            alt="Login Illustration"
-            width={600}
-            height={600}
-            style={{ width: "100%", height: "auto" }}
-            priority
-          />
+          <Image src="/Login.svg" alt="Login Illustration" width={600} height={600} style={{ width: "100%", height: "auto" }} priority />
         </LoginImage>
-
         <LogoContainer>
-          <Image 
-            src="/Logo.svg" 
-            alt="Page Flow Logo"
-            width={600}
-            height={50}
-            style={{ width: "100%", height: "auto" }}
-          />
+          <Image src="/Logo.svg" alt="Page Flow Logo" width={600} height={50} style={{ width: "100%", height: "auto" }} />
         </LogoContainer>
-
         <Phrase>Escreva. Compartilhe. Conecte-se.</Phrase>
       </LeftSection>
-      
+
       <RightSection>
         <SignInContainer>
           <TitleGroup>
@@ -111,19 +82,15 @@ export default function Login() {
             </Button>
           </ButtonGroup>
 
-          <Divider>
-            <Line />
-            <OrText>or</OrText>
-            <Line />
-          </Divider>
+          <Divider><Line /><OrText>or</OrText><Line /></Divider>
         </SignInContainer>
-        
+
         <InputGroup>
           <label className="text-xl">Email address</label>
           <InputContainer>
             <InputIcon>📩</InputIcon>
-            <InputField 
-              type="email" 
+            <InputField
+              type="email"
               name="email"
               placeholder="Email ..."
               value={form.email}
@@ -134,9 +101,9 @@ export default function Login() {
           <label className="text-xl mt-4">Password</label>
           <InputContainer>
             <InputIcon>🔒</InputIcon>
-            <InputField 
-              type="password" 
-              name="password"   
+            <InputField
+              type="password"
+              name="password"
               placeholder="Password ..."
               value={form.password}
               onChange={handleChange}
@@ -146,10 +113,8 @@ export default function Login() {
           <SignInButton onClick={handleSubmit}>Sign In</SignInButton>
 
           <RegisterText>
-            Don&apos;t have an account? 
-            <Link href="/Cadastro">
-              <span className="text-blue-900"> Create one</span>
-            </Link>
+            Don&apos;t have an account?
+            <Link href="/Cadastro"><span className="text-blue-900"> Create one</span></Link>
           </RegisterText>
         </InputGroup>
       </RightSection>
