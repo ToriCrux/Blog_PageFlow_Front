@@ -13,17 +13,13 @@ export const Container = tw.div<ContainerProps>`
   duration-300
   ${(p) => (p.$expanded ? "w-64" : "w-16")}
   bg-[#E9E9E9]
-  fixed
-  top-auto 
-  left-0
-  z-50
   shadow-md
 `;
 
 export const MenuWrapper = tw.div`
   flex
   flex-col
-  gap-4
+  gap-2
   mt-4
   px-2
 `;
@@ -31,30 +27,40 @@ export const MenuWrapper = tw.div`
 export const IconWrapper = tw.div`
   text-black
   text-xl
+  w-6
+  flex
+  justify-center
 `;
 
 export const MenuItem = tw.div<{ $selected?: boolean }>`
   flex
   items-center
   gap-4
-  p-2
+  h-12
+  w-full
+  px-3
   rounded-md
   cursor-pointer
-  transition-colors
+  transition-all
   duration-200
-  ${(p) => (p.$selected ? "bg-[#9C0D38BF] text-white" : "hover:bg-[#9C0D38] hover:text-white")}
+  ${(p) =>
+    p.$selected
+      ? "bg-[#9C0D38BF] text-white"
+      : "hover:bg-[#9C0D38] hover:text-white"}
 `;
 
 export const IconLabel = tw.span`
   text-black
   font-medium
+  transition-opacity
+  duration-300
 `;
 
 export const Footer = tw.div`
   flex
   flex-col
-  gap-4
-  p-2
+  gap-2
+  px-2
   mb-4
 `;
 

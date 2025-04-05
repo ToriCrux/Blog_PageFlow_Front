@@ -14,12 +14,15 @@ import {
   Footer
 } from "./styles";
 
+import { usePathname, useRouter } from "next/navigation";
 import { BlogUser, fetchUserData } from "@/app/API/UserAPI/ApiUserData";
 
 export default function BarraEsquerda() {
   const [expanded, setExpanded] = useState(false);
   const [user, setUser] = useState<BlogUser | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -53,12 +56,12 @@ export default function BarraEsquerda() {
           </UserInfo>
         )}
 
-        <MenuItem $selected>
+        <MenuItem $selected={pathname === "/Home"} onClick={() => router.push("/Home")}>
           <IconWrapper><i className="fas fa-home" /></IconWrapper>
           {expanded && <IconLabel>Home</IconLabel>}
         </MenuItem>
 
-        <MenuItem>
+        <MenuItem onClick={() => router.push("/Search")}>
           <IconWrapper><i className="fas fa-search" /></IconWrapper>
           {expanded && <IconLabel>Search</IconLabel>}
         </MenuItem>
@@ -68,7 +71,7 @@ export default function BarraEsquerda() {
           {expanded && <IconLabel>Categories</IconLabel>}
         </MenuItem>
 
-        <MenuItem>
+        <MenuItem $selected={pathname === "/User"} onClick={() => router.push("/User")}>
           <IconWrapper><i className="fas fa-user" /></IconWrapper>
           {expanded && <IconLabel>User</IconLabel>}
         </MenuItem>
