@@ -5,8 +5,8 @@ export const PostContainer = tw.div`
   rounded-md
   p-4
   mt-6
-  ml-20
-  w-[600px]
+  
+  w-full
   shadow-md
 `;
 

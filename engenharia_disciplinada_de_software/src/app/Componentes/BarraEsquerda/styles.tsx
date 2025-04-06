@@ -5,16 +5,21 @@ interface ContainerProps {
 }
 
 export const Container = tw.div<ContainerProps>`  
-  h-screen
+  fixed
+  top-16       
+  left-0
+  z-40
+  ${(p) => (p.$expanded ? "w-64" : "w-16")}
+  h-[calc(100vh-4rem)]  
+  bg-[#E9E9E9]
   flex
   flex-col
   justify-between
   transition-all
   duration-300
-  ${(p) => (p.$expanded ? "w-64" : "w-16")}
-  bg-[#E9E9E9]
   shadow-md
 `;
+
 
 export const MenuWrapper = tw.div`
   flex

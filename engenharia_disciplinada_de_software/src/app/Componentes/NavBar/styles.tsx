@@ -1,7 +1,12 @@
 import tw from 'tailwind-styled-components';
 
+
 export const Container = tw.div`
-  w-full
+  fixed
+  top-0
+  left-0
+  right-0
+  z-50            
   h-16
   bg-[#9C0D38]
   flex
@@ -10,6 +15,7 @@ export const Container = tw.div`
   px-6
   shadow-md
 `;
+
 
 export const LogoArea = tw.div`
   flex

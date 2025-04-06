@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState } from "react";
 import {
@@ -7,26 +7,48 @@ import {
   Divider,
   ActionsRow,
   ActionButton,
-  SendButton
+  SendButton,
 } from "./styles";
+import { createPost } from "../../API/WritePost/WritePostApi"; 
 
 export default function CriarPost() {
+  const [title, setTitle] = useState("");
   const [post, setPost] = useState("");
 
-  const handleSend = () => {
-    if (post.trim() === "") return;
-    console.log("Post enviado:", post);
-    setPost("");
+  const handleSend = async () => {
+    if (post.trim() === "" || title.trim() === "") return;
+
+    const response = await createPost({
+      title,
+      content: post,
+      categoryId: 1, 
+    });
+
+    if (response) {
+      console.log("Post criado com sucesso:");
+      setPost("");
+      setTitle("");
+    }
   };
 
   return (
-    <PostContainer >
+    <PostContainer>
+      <input
+        type="text"
+        placeholder="Title..."
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="w-full bg-transparent resize-none outline-none text-gray-700 placeholder-gray-500 mb-2"
+      />
+
       <TextArea
         placeholder="Write a post..."
         value={post}
         onChange={(e) => setPost(e.target.value)}
       />
+
       <Divider />
+
       <ActionsRow>
         <div className="flex gap-2">
           <ActionButton>
@@ -38,6 +60,7 @@ export default function CriarPost() {
             Location
           </ActionButton>
         </div>
+
         <SendButton onClick={handleSend}>
           <i className="fas fa-paper-plane" />
         </SendButton>
