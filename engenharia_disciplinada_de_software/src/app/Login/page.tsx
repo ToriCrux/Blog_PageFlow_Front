@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -8,29 +8,28 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import { loginUsuario } from "./apiServiceLogin";
 
 import {
-  Container, LeftSection, RightSection, Phrase, SignInContainer, Title, Subtitle,
-  ButtonGroup, Button, Divider, Line, OrText, TitleGroup, InputGroup, InputContainer,
-  InputIcon, InputField, SignInButton, RegisterText, LogoContainer, LoginImage
+  Container,
+  LeftSection,
+  RightSection,
+  Phrase,
+  SignInContainer,
+  Title,
+  Subtitle,
+  ButtonGroup,
+  Button,
+  Divider,
+  Line,
+  OrText,
+  TitleGroup,
+  InputGroup,
+  InputContainer,
+  InputIcon,
+  InputField,
+  SignInButton,
+  RegisterText,
+  LogoContainer,
+  LoginImage,
 } from "./styles";
-
-// 🔍 Função para decodificar o token JWT
-function parseJwt(token: string) {
-  try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
-    );
-
-    return JSON.parse(jsonPayload);
-  } catch (e) {
-    console.error("Erro ao decodificar o token:", e);
-    return null;
-  }
-}
 
 export default function Login() {
   const router = useRouter();
@@ -53,25 +52,18 @@ export default function Login() {
     try {
       const result = await loginUsuario({
         email: form.email,
-        password: form.password
+        password: form.password,
       });
 
       console.log("Resultado do login:", result); // Log para debug
 
-      if (result.jwt ) {
+      if (result.jwt) {
         localStorage.setItem("token", result.jwt);
-       
-
-        // 🔓 Decodifica o token JWT
-        const decoded = parseJwt(result.jwt);
-        console.log("📦 Informações do token decodificado:", decoded);
-
-        alert("Login realizado com sucesso!");
         router.push("/Home");
+        alert("Login realizado com sucesso!");
       } else {
         throw new Error("Token ou ID não recebido do servidor.");
       }
-
     } catch (error: any) {
       alert("Erro: " + error.message);
     }
@@ -81,10 +73,23 @@ export default function Login() {
     <Container>
       <LeftSection>
         <LoginImage>
-          <Image src="/Login.svg" alt="Login Illustration" width={600} height={600} style={{ width: "100%", height: "auto" }} priority />
+          <Image
+            src="/Login.svg"
+            alt="Login Illustration"
+            width={600}
+            height={600}
+            style={{ width: "100%", height: "auto" }}
+            priority
+          />
         </LoginImage>
         <LogoContainer>
-          <Image src="/Logo.svg" alt="Page Flow Logo" width={600} height={50} style={{ width: "100%", height: "auto" }} />
+          <Image
+            src="/Logo.svg"
+            alt="Page Flow Logo"
+            width={600}
+            height={50}
+            style={{ width: "100%", height: "auto" }}
+          />
         </LogoContainer>
         <Phrase>Escreva. Compartilhe. Conecte-se.</Phrase>
       </LeftSection>
@@ -105,20 +110,18 @@ export default function Login() {
             </Button>
           </ButtonGroup>
 
-          <Divider><Line /><OrText>or</OrText><Line /></Divider>
+          <Divider>
+            <Line />
+            <OrText>or</OrText>
+            <Line />
+          </Divider>
         </SignInContainer>
 
         <InputGroup>
           <label className="text-xl">Email address</label>
           <InputContainer>
             <InputIcon>📩</InputIcon>
-            <InputField
-              type="email"
-              name="email"
-              placeholder="Email ..."
-              value={form.email}
-              onChange={handleChange}
-            />
+            <InputField type="email" name="email" placeholder="Email ..." value={form.email} onChange={handleChange} />
           </InputContainer>
 
           <label className="text-xl mt-4">Password</label>
@@ -137,7 +140,9 @@ export default function Login() {
 
           <RegisterText>
             Don&apos;t have an account?
-            <Link href="/Cadastro"><span className="text-blue-900"> Create one</span></Link>
+            <Link href="/Cadastro">
+              <span className="text-blue-900"> Create one</span>
+            </Link>
           </RegisterText>
         </InputGroup>
       </RightSection>
