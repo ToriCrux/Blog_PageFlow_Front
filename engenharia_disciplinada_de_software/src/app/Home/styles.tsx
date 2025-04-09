@@ -5,5 +5,5 @@ export const HomeDiv = tw.div`
   items-center
   justify-center
   min-h-screen
-  bg-[#9C0D38]
+  bg-[#fffff]
 `;
