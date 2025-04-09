@@ -1,18 +1,27 @@
-import Image from "next/image";
-import { HomeDiv } from "./styles";
+"use client";
+
+import Head from "next/head";
+import NavBar from "../Componentes/NavBar/page";
+import BarraEsquerda from "../Componentes/BarraEsquerda/page";
+import CriarPost from "../Componentes/CriarPost/page";
+import PostContainer from "../Componentes/Posts/PostContainer"; 
 
 export default function Home() {
-  
-    return (
-      <HomeDiv>
-        <Image 
-                src="/Home.svg" 
-                alt="Building Illustration"
-                width={600}
-                height={600}
-                style={{ width: "20%", height: "auto" }}
-                priority
-              />
-      </HomeDiv>
-    );
-  }
+  return (
+    <>
+      <Head>
+        <link rel="icon" href="/favicon.ico" />
+        <title>Home | Page Flow</title>
+      </Head>
+
+      <NavBar />
+      <BarraEsquerda />
+      <main className="pt-20 pl-20 pr-4">
+        <div className="max-w-2xl mx-auto">
+          <CriarPost />
+          <PostContainer />
+        </div>
+      </main>
+    </>
+  );
+}
