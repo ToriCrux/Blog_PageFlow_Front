@@ -43,7 +43,7 @@ export default function Cadastro() {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "ADMINISTRATOR"
+    role: "AUTHOR"
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
