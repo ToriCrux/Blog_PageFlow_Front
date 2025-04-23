@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAllPosts, PostData } from "../../API/GetPosts/GetPostsAPI";
-import { deletePostById } from "../../API/DeletePost/DeletePost";
-import { updatePost } from "../../API/PutPost/EditarPost";
-import { postComment } from "../../API/PostComents/PostComentsAPI";
-import { getAllComments, CommentData } from "../../API/GetComents/GetComents";
+import { getAllPosts, PostData } from "../../API/Posts/GetPosts/GetPostsAPI";
+import { deletePostById } from "../../API/Posts/DeletePost/DeletePost";
+import { updatePost } from "../../API/Posts/PutPost/EditarPost";
+import { postComment } from "../../API/Comments/PostComents/PostComentsAPI";
+import { getAllComments, CommentData } from "../../API/Comments/GetComents/GetComents";
+import { useSearchParams } from "next/navigation";
+import { getPostsByCategory } from "../../API/Posts/GetPostCategory/GetPostCategory";
 
 import {
   PostWrapper,
@@ -35,10 +37,19 @@ export default function PostContainer() {
   const [editedContent, setEditedContent] = useState("");
   const [commentInput, setCommentInput] = useState<Record<number, string>>({});
   const [comments, setComments] = useState<CommentData[]>([]);
+  const searchParams = useSearchParams();
+  const categoryName = searchParams.get("category");
 
   useEffect(() => {
     const fetchData = async () => {
-      const postsData = await getAllPosts();
+      let postsData = null;
+
+      if (categoryName) {
+        postsData = await getPostsByCategory(categoryName);
+      } else {
+        postsData = await getAllPosts();
+      }
+
       const commentsData = await getAllComments();
 
       if (postsData) setPosts(postsData);
@@ -52,7 +63,7 @@ export default function PostContainer() {
     }
 
     fetchData();
-  }, []);
+  }, [categoryName]);
 
   const handleDelete = async (postId: number) => {
     const confirmDelete = confirm("Deseja realmente excluir este post?");

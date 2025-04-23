@@ -3,6 +3,7 @@ const API_BASE_URL = "http://localhost:8080";
 interface CreatePostPayload {
   title: string;
   content: string;
+  categoryId: number; 
 }
 
 export const createPost = async (payload: CreatePostPayload): Promise<any | null> => {

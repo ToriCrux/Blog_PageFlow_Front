@@ -71,7 +71,7 @@ export default function BarraEsquerda() {
             {expanded && <IconLabel>Search</IconLabel>}
           </MenuItem>
 
-          <MenuItem>
+          <MenuItem onClick={() => router.push("/Categorias")}>
             <IconWrapper><i className="fas fa-layer-group" /></IconWrapper>
             {expanded && <IconLabel>Categories</IconLabel>}
           </MenuItem>
