@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { getAllPosts, PostData } from "../../API/GetPosts/GetPostsAPI";
 import { deletePostById } from "../../API/DeletePost/DeletePost";
 import { updatePost } from "../../API/PutPost/EditarPost";
+import { postComment } from "../../API/PostComents/PostComentsAPI";
+import { getAllComments, CommentData } from "../../API/GetComents/GetComents";
+
 import {
   PostWrapper,
   PostHeader,
@@ -30,11 +33,16 @@ export default function PostContainer() {
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
   const [editedTitle, setEditedTitle] = useState("");
   const [editedContent, setEditedContent] = useState("");
+  const [commentInput, setCommentInput] = useState<Record<number, string>>({});
+  const [comments, setComments] = useState<CommentData[]>([]);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      const data = await getAllPosts();
-      if (data) setPosts(data);
+    const fetchData = async () => {
+      const postsData = await getAllPosts();
+      const commentsData = await getAllComments();
+
+      if (postsData) setPosts(postsData);
+      setComments(commentsData);
     };
 
     const token = localStorage.getItem("token");
@@ -43,7 +51,7 @@ export default function PostContainer() {
       setUserId(decoded?.id || null);
     }
 
-    fetchPosts();
+    fetchData();
   }, []);
 
   const handleDelete = async (postId: number) => {
@@ -77,6 +85,28 @@ export default function PostContainer() {
         )
       );
       setEditingPostId(null);
+    }
+  };
+
+  const handleCommentSubmit = async (postId: number) => {
+    const content = commentInput[postId]?.trim();
+    if (!content) return;
+
+    const success = await postComment({
+      content,
+      approved: true,
+      updatedAt: new Date().toISOString(),
+    });
+
+    if (success) {
+      alert("Comentário enviado!");
+      setCommentInput((prev) => ({ ...prev, [postId]: "" }));
+
+      // Atualiza a lista de comentários
+      const updatedComments = await getAllComments();
+      setComments(updatedComments);
+    } else {
+      alert("Erro ao enviar comentário.");
     }
   };
 
@@ -114,6 +144,17 @@ export default function PostContainer() {
                 <PostContent>{post.content}</PostContent>
               </>
             )}
+
+            <div className="mt-4">
+              <p className="font-semibold text-sm text-gray-600">Comentários:</p>
+              <ul className="text-sm text-gray-800 pl-4 list-disc">
+                {comments.map((comment, index) => (
+                  <li key={index} className="mt-1">
+                    {comment.content}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </PostBody>
 
           <PostFooter>
@@ -122,7 +163,21 @@ export default function PostContainer() {
                 <i className="fas fa-paper-plane" />
               </SendEditIcon>
             ) : (
-              <CommentBox placeholder="Write a comment..." />
+              <>
+                <CommentBox
+                  placeholder="Write a comment..."
+                  value={commentInput[post.id] || ""}
+                  onChange={(e) =>
+                    setCommentInput((prev) => ({
+                      ...prev,
+                      [post.id]: e.target.value,
+                    }))
+                  }
+                />
+                <SendEditIcon onClick={() => handleCommentSubmit(post.id)}>
+                  <i className="fas fa-paper-plane" />
+                </SendEditIcon>
+              </>
             )}
           </PostFooter>
         </PostWrapper>
