@@ -21,6 +21,7 @@ export const getAllCategories = async (): Promise<CategoriaData[]> => {
     if (!response.ok) throw new Error("Erro ao buscar categorias");
 
     const categorias = await response.json();
+
     return categorias;
   } catch (error) {
     console.error("Erro ao buscar categorias:", error);

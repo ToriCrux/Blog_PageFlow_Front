@@ -18,6 +18,15 @@ export interface PostData {
     id: number;
     name: string;
   };
+  comments: [
+    {
+      id: number;
+      content: string;
+      approved: boolean;
+      createdAt: string;
+      updatedAt: string;
+    }
+  ];
 }
 
 export const getAllPosts = async (): Promise<PostData[] | null> => {
@@ -27,9 +36,11 @@ export const getAllPosts = async (): Promise<PostData[] | null> => {
     if (!response.ok) throw new Error("Erro ao buscar posts");
 
     const posts = await response.json();
+
     return posts as PostData[];
   } catch (error) {
     console.error("Erro ao buscar posts:", error);
+
     return null;
   }
 };

@@ -26,9 +26,7 @@ export function usePostContainer() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const postsData = categoryName
-        ? await getPostsByCategory(categoryName)
-        : await getAllPosts();
+      const postsData = categoryName ? await getPostsByCategory(categoryName) : await getAllPosts();
 
       const commentsData = await getAllComments();
 
@@ -69,11 +67,7 @@ export function usePostContainer() {
     });
 
     if (success) {
-      setPosts((prev) =>
-        prev.map((p) =>
-          p.id === postId ? { ...p, title: editedTitle, content: editedContent } : p
-        )
-      );
+      setPosts((prev) => prev.map((p) => (p.id === postId ? { ...p, title: editedTitle, content: editedContent } : p)));
       setEditingPostId(null);
     }
   };
@@ -83,6 +77,7 @@ export function usePostContainer() {
     if (!content) return;
 
     const success = await postComment({
+      postId,
       content,
       approved: true,
       updatedAt: new Date().toISOString(),
@@ -93,15 +88,30 @@ export function usePostContainer() {
       setCommentInput((prev) => ({ ...prev, [postId]: "" }));
       const updatedComments = await getAllComments();
       setComments(updatedComments);
+
+      // Atualiza os comentários do post não é a melhor prática,
+      // mas para fins de simplicidade, vamos fazer isso.
+      // Caso tenhamos tempo refatorar
+      window.location.reload();
     } else {
       alert("Erro ao enviar comentário.");
     }
   };
 
   return {
-    posts, userId, editingPostId, editedTitle, editedContent,
-    commentInput, comments,
-    setEditedTitle, setEditedContent, setCommentInput,
-    handleDelete, handleEdit, handleSubmitEdit, handleCommentSubmit,
+    posts,
+    userId,
+    editingPostId,
+    editedTitle,
+    editedContent,
+    commentInput,
+    comments,
+    setEditedTitle,
+    setEditedContent,
+    setCommentInput,
+    handleDelete,
+    handleEdit,
+    handleSubmitEdit,
+    handleCommentSubmit,
   };
 }

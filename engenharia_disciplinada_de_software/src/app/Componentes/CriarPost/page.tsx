@@ -1,14 +1,7 @@
 // Componentes/CriarPost/page.tsx
 "use client";
 
-import {
-  PostContainer,
-  TextArea,
-  Divider,
-  ActionsRow,
-  ActionButton,
-  SendButton,
-} from "./styles";
+import { PostContainer, TextArea, Divider, ActionsRow, ActionButton, SendButton } from "./styles";
 
 import { Montserrat, Poppins } from "next/font/google";
 import { useCriarPost } from "./useCriarPost";
@@ -17,13 +10,8 @@ export const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"
 export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
 
 export default function CriarPost() {
-  const {
-    title, setTitle,
-    post, setPost,
-    categorias,
-    selectedCategoria, setSelectedCategoria,
-    handleSend,
-  } = useCriarPost();
+  const { title, setTitle, post, setPost, categorias, selectedCategoria, setSelectedCategoria, handleSend } =
+    useCriarPost();
 
   return (
     <div className={poppins.className}>
@@ -36,11 +24,7 @@ export default function CriarPost() {
           className="w-full bg-transparent resize-none outline-none text-gray-700 placeholder-gray-500 mb-2"
         />
 
-        <TextArea
-          placeholder="Write a post..."
-          value={post}
-          onChange={(e) => setPost(e.target.value)}
-        />
+        <TextArea placeholder="Write a post..." value={post} onChange={(e) => setPost(e.target.value)} />
 
         <select
           value={selectedCategoria ?? ""}

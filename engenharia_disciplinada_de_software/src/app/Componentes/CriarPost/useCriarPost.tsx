@@ -34,14 +34,22 @@ export function useCriarPost() {
       setPost("");
       setTitle("");
       setSelectedCategoria(categorias[0]?.id || null);
+
+      // Atualiza os comentários do post não é a melhor prática,
+      // mas para fins de simplicidade, vamos fazer isso.
+      // Caso tenhamos tempo refatorar
+      window.location.reload();
     }
   };
 
   return {
-    title, setTitle,
-    post, setPost,
+    title,
+    setTitle,
+    post,
+    setPost,
     categorias,
-    selectedCategoria, setSelectedCategoria,
+    selectedCategoria,
+    setSelectedCategoria,
     handleSend,
   };
 }

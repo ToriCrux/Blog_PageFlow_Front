@@ -25,10 +25,20 @@ export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
 
 export default function PostContainer() {
   const {
-    posts, userId, editingPostId, editedTitle, editedContent,
-    commentInput, comments,
-    setEditedTitle, setEditedContent, setCommentInput,
-    handleDelete, handleEdit, handleSubmitEdit, handleCommentSubmit,
+    posts,
+    userId,
+    editingPostId,
+    editedTitle,
+    editedContent,
+    commentInput,
+    comments,
+    setEditedTitle,
+    setEditedContent,
+    setCommentInput,
+    handleDelete,
+    handleEdit,
+    handleSubmitEdit,
+    handleCommentSubmit,
   } = usePostContainer();
 
   return (
@@ -50,14 +60,8 @@ export default function PostContainer() {
           <PostBody>
             {editingPostId === post.id ? (
               <>
-                <InputStyled
-                  value={editedTitle}
-                  onChange={(e) => setEditedTitle(e.target.value)}
-                />
-                <TextareaStyled
-                  value={editedContent}
-                  onChange={(e) => setEditedContent(e.target.value)}
-                />
+                <InputStyled value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)} />
+                <TextareaStyled value={editedContent} onChange={(e) => setEditedContent(e.target.value)} />
               </>
             ) : (
               <>
@@ -69,7 +73,7 @@ export default function PostContainer() {
             <div className="mt-4">
               <p className="font-semibold text-sm text-gray-600">Comentários:</p>
               <ul className="text-sm text-gray-800 pl-4 list-disc">
-                {comments.map((comment, index) => (
+                {post.comments.map((comment, index) => (
                   <li key={index} className="mt-1">
                     {comment.content}
                   </li>
