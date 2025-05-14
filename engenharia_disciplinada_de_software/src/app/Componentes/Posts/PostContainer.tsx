@@ -1,4 +1,3 @@
-// Posts/PostContainer.tsx
 "use client";
 
 import {
@@ -31,7 +30,6 @@ export default function PostContainer() {
     editedTitle,
     editedContent,
     commentInput,
-    comments,
     setEditedTitle,
     setEditedContent,
     setCommentInput,
@@ -60,8 +58,14 @@ export default function PostContainer() {
           <PostBody>
             {editingPostId === post.id ? (
               <>
-                <InputStyled value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)} />
-                <TextareaStyled value={editedContent} onChange={(e) => setEditedContent(e.target.value)} />
+                <InputStyled
+                  value={editedTitle}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                />
+                <TextareaStyled
+                  value={editedContent}
+                  onChange={(e) => setEditedContent(e.target.value)}
+                />
               </>
             ) : (
               <>
@@ -73,7 +77,7 @@ export default function PostContainer() {
             <div className="mt-4">
               <p className="font-semibold text-sm text-gray-600">Comentários:</p>
               <ul className="text-sm text-gray-800 pl-4 list-disc">
-                {post.comments.map((comment, index) => (
+                {(post.comments ?? []).map((comment, index) => (
                   <li key={index} className="mt-1">
                     {comment.content}
                   </li>

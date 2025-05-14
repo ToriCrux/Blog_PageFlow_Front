@@ -1,4 +1,3 @@
-// Posts/usePostContainer.ts
 "use client";
 
 import { useEffect, useState } from "react";
@@ -8,9 +7,7 @@ import { getAllPosts, PostData } from "../../API/Posts/GetPosts/GetPostsAPI";
 import { deletePostById } from "../../API/Posts/DeletePost/DeletePost";
 import { updatePost } from "../../API/Posts/PutPost/EditarPost";
 import { postComment } from "../../API/Comments/PostComents/PostComentsAPI";
-import { getAllComments, CommentData } from "../../API/Comments/GetComents/GetComents";
 import { getPostsByCategory } from "../../API/Posts/GetPostCategory/GetPostCategory";
-
 import { parseJwt } from "./parseJwt";
 
 export function usePostContainer() {
@@ -20,18 +17,16 @@ export function usePostContainer() {
   const [editedTitle, setEditedTitle] = useState("");
   const [editedContent, setEditedContent] = useState("");
   const [commentInput, setCommentInput] = useState<Record<number, string>>({});
-  const [comments, setComments] = useState<CommentData[]>([]);
   const searchParams = useSearchParams();
   const categoryName = searchParams.get("category");
 
   useEffect(() => {
     const fetchData = async () => {
-      const postsData = categoryName ? await getPostsByCategory(categoryName) : await getAllPosts();
-
-      const commentsData = await getAllComments();
+      const postsData = categoryName
+        ? await getPostsByCategory(categoryName)
+        : await getAllPosts();
 
       if (postsData) setPosts(postsData);
-      setComments(commentsData);
     };
 
     const token = localStorage.getItem("token");
@@ -67,7 +62,11 @@ export function usePostContainer() {
     });
 
     if (success) {
-      setPosts((prev) => prev.map((p) => (p.id === postId ? { ...p, title: editedTitle, content: editedContent } : p)));
+      setPosts((prev) =>
+        prev.map((p) =>
+          p.id === postId ? { ...p, title: editedTitle, content: editedContent } : p
+        )
+      );
       setEditingPostId(null);
     }
   };
@@ -86,12 +85,6 @@ export function usePostContainer() {
     if (success) {
       alert("Comentário enviado!");
       setCommentInput((prev) => ({ ...prev, [postId]: "" }));
-      const updatedComments = await getAllComments();
-      setComments(updatedComments);
-
-      // Atualiza os comentários do post não é a melhor prática,
-      // mas para fins de simplicidade, vamos fazer isso.
-      // Caso tenhamos tempo refatorar
       window.location.reload();
     } else {
       alert("Erro ao enviar comentário.");
@@ -105,7 +98,6 @@ export function usePostContainer() {
     editedTitle,
     editedContent,
     commentInput,
-    comments,
     setEditedTitle,
     setEditedContent,
     setCommentInput,
