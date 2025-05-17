@@ -22,6 +22,14 @@ export function usePostContainer() {
 
   useEffect(() => {
     const fetchData = async () => {
+      const stored = sessionStorage.getItem("postsByCategory");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        setPosts(parsed);
+        sessionStorage.removeItem("postsByCategory");
+        return;
+      }
+
       const postsData = categoryName
         ? await getPostsByCategory(categoryName)
         : await getAllPosts();

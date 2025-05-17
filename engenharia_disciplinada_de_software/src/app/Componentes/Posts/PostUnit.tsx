@@ -16,6 +16,7 @@ import {
   TextareaStyled,
 } from "./styles";
 
+import { useState } from "react";
 import { Montserrat, Poppins } from "next/font/google";
 import { PostData } from "@/app/API/Posts/GetPosts/GetPostsAPI";
 import { CommentData } from "@/app/API/Comments/GetComents/GetComents";
@@ -30,7 +31,6 @@ type Props = {
   editedTitle: string;
   editedContent: string;
   commentInput: Record<number, string>;
-  comments: CommentData[];
   setEditedTitle: (val: string) => void;
   setEditedContent: (val: string) => void;
   setCommentInput: (val: Record<number, string>) => void;
@@ -47,7 +47,6 @@ export default function PostUnit({
   editedTitle,
   editedContent,
   commentInput,
-  comments,
   setEditedTitle,
   setEditedContent,
   setCommentInput,
@@ -56,6 +55,15 @@ export default function PostUnit({
   handleSubmitEdit,
   handleCommentSubmit,
 }: Props) {
+  const [visibleComments, setVisibleComments] = useState<Record<number, boolean>>({});
+
+  const toggleComments = (postId: number) => {
+    setVisibleComments((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+  };
+
   return (
     <div className={poppins.className}>
       <PostWrapper>
@@ -85,14 +93,21 @@ export default function PostUnit({
           )}
 
           <div className="mt-4">
-            <p className="font-semibold text-sm text-gray-600">Comentários:</p>
-            <ul className="text-sm text-gray-800 pl-4 list-disc">
-              {post.comments.map((comment, index) => (
-                <li key={index} className="mt-1">
-                  {comment.content}
-                </li>
-              ))}
-            </ul>
+            <div
+              className="flex items-center gap-2 cursor-pointer text-sm text-gray-600 font-semibold"
+              onClick={() => toggleComments(post.id)}
+            >
+              💬 {post.comments?.length ?? 0} comentário{(post.comments?.length !== 1 ? "s" : "")}
+              <span>{visibleComments[post.id] ? "🔼" : "🔽"}</span>
+            </div>
+
+            {visibleComments[post.id] && (
+              <ul className="text-sm text-gray-800 pl-4 list-disc mt-1">
+                {(post.comments ?? []).map((comment, index) => (
+                  <li key={index}>{comment.content}</li>
+                ))}
+              </ul>
+            )}
           </div>
         </PostBody>
 
@@ -107,7 +122,7 @@ export default function PostUnit({
                 placeholder="Write a comment..."
                 value={commentInput[post.id] || ""}
                 onChange={(e) =>
-                  setCommentInput((prev: Record<number, string>) => ({
+                  setCommentInput((prev) => ({
                     ...prev,
                     [post.id]: e.target.value,
                   }))

@@ -18,6 +18,7 @@ import {
 
 import { Montserrat, Poppins } from "next/font/google";
 import { usePostContainer } from "./usePostContainer";
+import { useState } from "react";
 
 export const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
 export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
@@ -38,6 +39,15 @@ export default function PostContainer() {
     handleSubmitEdit,
     handleCommentSubmit,
   } = usePostContainer();
+
+  const [visibleComments, setVisibleComments] = useState<Record<number, boolean>>({});
+
+  const toggleComments = (postId: number) => {
+    setVisibleComments((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+  };
 
   return (
     <div className={poppins.className}>
@@ -75,14 +85,21 @@ export default function PostContainer() {
             )}
 
             <div className="mt-4">
-              <p className="font-semibold text-sm text-gray-600">Comentários:</p>
-              <ul className="text-sm text-gray-800 pl-4 list-disc">
-                {(post.comments ?? []).map((comment, index) => (
-                  <li key={index} className="mt-1">
-                    {comment.content}
-                  </li>
-                ))}
-              </ul>
+              <div
+                className="flex items-center gap-2 cursor-pointer text-sm text-gray-600 font-semibold"
+                onClick={() => toggleComments(post.id)}
+              >
+                💬 {post.comments?.length ?? 0} comentário{(post.comments?.length !== 1 ? "s" : "")}
+                <span>{visibleComments[post.id] ? "🔼" : "🔽"}</span>
+              </div>
+
+              {visibleComments[post.id] && (
+                <ul className="text-sm text-gray-800 pl-4 list-disc mt-1">
+                  {(post.comments ?? []).map((comment, index) => (
+                    <li key={index}>{comment.content}</li>
+                  ))}
+                </ul>
+              )}
             </div>
           </PostBody>
 

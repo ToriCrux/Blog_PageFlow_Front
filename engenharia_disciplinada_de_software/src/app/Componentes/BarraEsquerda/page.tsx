@@ -1,11 +1,11 @@
-// BarraEsquerda/BarraEsquerda.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useUserData } from "./useUserData";
 import { MenuItemWithIcon } from "./MenuItemWithIcon";
+import { getAllPosts } from "../../API/Posts/GetPosts/GetPostsAPI";
 
 import {
   Container,
@@ -22,11 +22,26 @@ export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
 
 export default function BarraEsquerda() {
   const [expanded, setExpanded] = useState(false);
+  const [userPostCount, setUserPostCount] = useState<number>(0);
   const { user, token } = useUserData();
   const router = useRouter();
   const pathname = usePathname();
 
   const handleGoTo = (path: string) => router.push(path);
+
+  useEffect(() => {
+    const fetchUserPostCount = async () => {
+      if (!user?.id) return;
+
+      const allPosts = await getAllPosts();
+      if (allPosts) {
+        const count = allPosts.filter((post) => post.author.id === user.id).length;
+        setUserPostCount(count);
+      }
+    };
+
+    fetchUserPostCount();
+  }, [user]);
 
   return (
     <div className={poppins.className}>
@@ -42,7 +57,9 @@ export default function BarraEsquerda() {
               <div>
                 <UserName>{user.name}</UserName>
                 {token ? (
-                  <UserStatus>🟢 Ativo</UserStatus>
+                  <UserStatus>
+                    🟢 Ativo <span style={{ color: "white" }}>&nbsp;•&nbsp; {userPostCount} post{userPostCount !== 1 ? "s" : ""}</span>
+                  </UserStatus>
                 ) : (
                   <UserStatus>🔴 Offline</UserStatus>
                 )}
