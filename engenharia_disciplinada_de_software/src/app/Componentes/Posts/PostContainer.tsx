@@ -23,7 +23,11 @@ import { useState } from "react";
 export const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
 export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
 
-export default function PostContainer() {
+type PostContainerProps = {
+  searchTerm: string;
+};
+
+export default function PostContainer({ searchTerm }: PostContainerProps) {
   const {
     posts,
     userId,
@@ -49,44 +53,63 @@ export default function PostContainer() {
     }));
   };
 
+  const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    post.content.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className={poppins.className}>
-      {posts.map((post) => (
-        <PostWrapper key={post.id}>
-          <PostHeader>
-            <AuthorImage />
-            <div className="font-bold">{post.author.name}</div>
+      {filteredPosts.map((post) => (
+        <PostWrapper key={post.id} className="mb-8">
+          <PostHeader className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <AuthorImage />
+              <div className="font-bold text-lg">{post.author.name}</div>
+            </div>
 
             {post.author.id === userId && (
-              <>
-                <EditIcon onClick={() => handleEdit(post)}>✎</EditIcon>
-                <DeleteIcon onClick={() => handleDelete(post.id)}>✖</DeleteIcon>
-              </>
+              <div className="flex items-center gap-4 text-gray-600">
+                <EditIcon
+                  onClick={() => handleEdit(post)}
+                  className="cursor-pointer text-xl hover:text-blue-500"
+                >
+                  ✎
+                </EditIcon>
+                <DeleteIcon
+                  onClick={() => handleDelete(post.id)}
+                  className="cursor-pointer text-xl hover:text-red-500"
+                >
+                  ✖
+                </DeleteIcon>
+              </div>
             )}
           </PostHeader>
 
-          <PostBody>
+          <PostBody className="mt-4">
             {editingPostId === post.id ? (
               <>
                 <InputStyled
                   value={editedTitle}
                   onChange={(e) => setEditedTitle(e.target.value)}
+                  className="w-full p-2 mb-4 border border-gray-300 rounded-md"
                 />
                 <TextareaStyled
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}
+                  className="w-full p-2 mb-4 border border-gray-300 rounded-md"
                 />
               </>
             ) : (
               <>
-                <PostTitle>{post.title}</PostTitle>
-                <PostContent>{post.content}</PostContent>
+                <PostTitle className="text-2xl font-bold text-gray-800">{post.title}</PostTitle>
+                <PostContent className="text-lg text-gray-700 mt-2">{post.content}</PostContent>
               </>
             )}
 
             <div className="mt-4">
               <div
-                className="flex items-center gap-2 cursor-pointer text-sm text-gray-600 font-semibold"
+                className="flex items-center gap-2 cursor-pointer text-sm text-gray-600 font-semibold hover:text-blue-600"
                 onClick={() => toggleComments(post.id)}
               >
                 💬 {post.comments?.length ?? 0} comentário{(post.comments?.length !== 1 ? "s" : "")}
@@ -103,9 +126,9 @@ export default function PostContainer() {
             </div>
           </PostBody>
 
-          <PostFooter>
+          <PostFooter className="flex justify-between items-center mt-4">
             {editingPostId === post.id ? (
-              <SendEditIcon onClick={() => handleSubmitEdit(post.id)}>
+              <SendEditIcon onClick={() => handleSubmitEdit(post.id)} className="text-blue-500 cursor-pointer">
                 <i className="fas fa-paper-plane" />
               </SendEditIcon>
             ) : (
@@ -119,8 +142,12 @@ export default function PostContainer() {
                       [post.id]: e.target.value,
                     }))
                   }
+                  className="w-full p-2 border border-gray-300 rounded-md"
                 />
-                <SendEditIcon onClick={() => handleCommentSubmit(post.id)}>
+                <SendEditIcon
+                  onClick={() => handleCommentSubmit(post.id)}
+                  className="text-blue-500 cursor-pointer"
+                >
                   <i className="fas fa-paper-plane" />
                 </SendEditIcon>
               </>

@@ -1,12 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import Head from "next/head";
 import NavBar from "../Componentes/NavBar/page";
 import BarraEsquerda from "../Componentes/BarraEsquerda/page";
 import CriarPost from "../Componentes/CriarPost/page";
-import PostContainer from "../Componentes/Posts/PostContainer"; 
+import PostContainer from "../Componentes/Posts/PostContainer";
+import { Poppins } from "next/font/google";
+
+export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
 
 export default function Home() {
+  const [searchTerm, setSearchTerm] = useState("");
+
   return (
     <>
       <Head>
@@ -19,7 +25,19 @@ export default function Home() {
       <main className="pt-20 pl-20 pr-4">
         <div className="max-w-2xl mx-auto">
           <CriarPost />
-          <PostContainer />
+
+          {/* Barra de Pesquisa */}
+          <div className="mb-6">
+            <input
+              type="text"
+              placeholder="Buscar posts..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className={`${poppins.className} w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition ease-in-out`}
+            />
+          </div>
+
+          <PostContainer searchTerm={searchTerm} />
         </div>
       </main>
     </>
