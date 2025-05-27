@@ -20,6 +20,9 @@ import { Montserrat, Poppins } from "next/font/google";
 import { usePostContainer } from "./usePostContainer";
 import { useState } from "react";
 
+import DOMPurify from "dompurify";
+const purifier = DOMPurify as unknown as { sanitize: (dirty: string) => string };
+
 export const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
 export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -103,7 +106,9 @@ export default function PostContainer({ searchTerm }: PostContainerProps) {
             ) : (
               <>
                 <PostTitle className="text-2xl font-bold text-gray-800">{post.title}</PostTitle>
-                <PostContent className="text-lg text-gray-700 mt-2">{post.content}</PostContent>
+                <PostContent
+                  dangerouslySetInnerHTML={{ __html: purifier.sanitize(post.content) }}
+                />
               </>
             )}
 
