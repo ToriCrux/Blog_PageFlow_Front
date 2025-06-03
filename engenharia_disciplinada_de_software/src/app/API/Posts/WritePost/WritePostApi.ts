@@ -6,7 +6,9 @@ interface CreatePostPayload {
   categoryId: number; 
 }
 
-export const createPost = async (payload: CreatePostPayload): Promise<any | null> => {
+export const createPost = async (
+  payload: CreatePostPayload
+): Promise<unknown | null> => {
   const token = localStorage.getItem("token");
 
   if (!token) {

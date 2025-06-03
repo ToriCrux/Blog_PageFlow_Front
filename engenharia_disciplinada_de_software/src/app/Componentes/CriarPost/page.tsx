@@ -1,5 +1,4 @@
-// Componentes/CriarPost/page.tsx
-"use client";
+'use client';
 
 import {
   PostContainer,
@@ -11,9 +10,9 @@ import {
 
 import { Montserrat, Poppins } from "next/font/google";
 import { useCriarPost } from "./useCriarPost";
+import TinyEditorWrapper from "./TinyEditorWrapper";
 
-import { Editor } from "@tinymce/tinymce-react";
-import { useRef } from "react";
+
 
 export const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
 export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
@@ -41,7 +40,7 @@ export default function CriarPost() {
           className="w-full bg-transparent resize-none outline-none text-gray-700 placeholder-gray-500 mb-2"
         />
 
-        <Editor
+        <TinyEditorWrapper
           apiKey="4knoygedy11gmj5630ocpttktkw3zaeynfopcxk93zn86moc"
           value={post}
           onEditorChange={(content) => setPost(content)}
@@ -50,9 +49,9 @@ export default function CriarPost() {
             menubar: false,
             plugins: [],
             toolbar:
-              "undo redo | formatselect | bold italic underline | \
-               alignleft aligncenter alignright alignjustify | \
-               bullist numlist outdent indent | removeformat | help",
+              "undo redo | formatselect | bold italic underline | " +
+              "alignleft aligncenter alignright alignjustify | " +
+              "bullist numlist outdent indent | removeformat | help",
             content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           }}
         />

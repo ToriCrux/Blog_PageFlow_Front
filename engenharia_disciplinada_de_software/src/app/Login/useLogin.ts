@@ -30,8 +30,12 @@ export function useLogin() {
       } else {
         throw new Error("Token ou ID não recebido do servidor.");
       }
-    } catch (error: any) {
-      alert("Erro: " + error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert("Erro: " + error.message);
+      } else {
+        alert("Erro inesperado.");
+      }
     }
   };
 

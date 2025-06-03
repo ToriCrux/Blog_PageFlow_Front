@@ -70,7 +70,6 @@ function UserPostsOnly() {
     editedTitle,
     editedContent,
     commentInput,
-    comments,
     setEditedTitle,
     setEditedContent,
     setCommentInput,
@@ -99,7 +98,6 @@ function UserPostsOnly() {
           editedTitle={editedTitle}
           editedContent={editedContent}
           commentInput={commentInput}
-          comments={comments}
           setEditedTitle={setEditedTitle}
           setEditedContent={setEditedContent}
           setCommentInput={setCommentInput}

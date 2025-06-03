@@ -19,8 +19,8 @@ import {
 import { Montserrat, Poppins } from "next/font/google";
 import { usePostContainer } from "./usePostContainer";
 import { useState } from "react";
-
 import DOMPurify from "dompurify";
+
 const purifier = DOMPurify as unknown as { sanitize: (dirty: string) => string };
 
 export const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
@@ -94,12 +94,16 @@ export default function PostContainer({ searchTerm }: PostContainerProps) {
               <>
                 <InputStyled
                   value={editedTitle}
-                  onChange={(e) => setEditedTitle(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setEditedTitle(e.target.value)
+                  }
                   className="w-full p-2 mb-4 border border-gray-300 rounded-md"
                 />
                 <TextareaStyled
                   value={editedContent}
-                  onChange={(e) => setEditedContent(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                    setEditedContent(e.target.value)
+                  }
                   className="w-full p-2 mb-4 border border-gray-300 rounded-md"
                 />
               </>
@@ -141,7 +145,7 @@ export default function PostContainer({ searchTerm }: PostContainerProps) {
                 <CommentBox
                   placeholder="Write a comment..."
                   value={commentInput[post.id] || ""}
-                  onChange={(e) =>
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setCommentInput((prev) => ({
                       ...prev,
                       [post.id]: e.target.value,

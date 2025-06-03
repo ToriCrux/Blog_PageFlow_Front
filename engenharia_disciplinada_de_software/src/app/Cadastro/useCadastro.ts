@@ -46,9 +46,13 @@ export function useCadastro() {
         confirmPassword: "",
         role: "AUTHOR", // corrigido aqui (antes era ADMINISTRATOR)
       });
-    } catch (error: any) {
-      alert("Erro ao cadastrar usuário: " + error.message);
-    }
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          alert("Erro ao cadastrar usuário: " + error.message);
+        } else {
+          alert("Erro desconhecido ao cadastrar usuário.");
+        }
+      }
   };
 
   return { form, handleChange, handleSubmit };

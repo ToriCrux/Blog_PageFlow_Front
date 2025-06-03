@@ -16,10 +16,9 @@ import {
   TextareaStyled,
 } from "./styles";
 
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { Montserrat, Poppins } from "next/font/google";
 import { PostData } from "@/app/API/Posts/GetPosts/GetPostsAPI";
-import { CommentData } from "@/app/API/Comments/GetComents/GetComents";
 
 export const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
 export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
@@ -58,10 +57,29 @@ export default function PostUnit({
   const [visibleComments, setVisibleComments] = useState<Record<number, boolean>>({});
 
   const toggleComments = (postId: number) => {
-    setVisibleComments((prev) => ({
+    setVisibleComments((prev: Record<number, boolean>) => ({
       ...prev,
       [postId]: !prev[postId],
     }));
+  };
+
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEditedTitle(e.target.value);
+  };
+
+  const handleContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setEditedContent(e.target.value);
+  };
+
+  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    setCommentInput((prev: Record<number, string>) => {
+      return {
+        ...prev,
+        [post.id]: e.target.value,
+      };
+    });
   };
 
   return (
@@ -82,8 +100,8 @@ export default function PostUnit({
         <PostBody>
           {editingPostId === post.id ? (
             <>
-              <InputStyled value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)} />
-              <TextareaStyled value={editedContent} onChange={(e) => setEditedContent(e.target.value)} />
+              <InputStyled value={editedTitle} onChange={handleTitleChange} />
+              <TextareaStyled value={editedContent} onChange={handleContentChange} />
             </>
           ) : (
             <>
@@ -121,12 +139,7 @@ export default function PostUnit({
               <CommentBox
                 placeholder="Write a comment..."
                 value={commentInput[post.id] || ""}
-                onChange={(e) =>
-                  setCommentInput((prev) => ({
-                    ...prev,
-                    [post.id]: e.target.value,
-                  }))
-                }
+                onChange={handleCommentChange}
               />
               <SendEditIcon onClick={() => handleCommentSubmit(post.id)}>
                 <i className="fas fa-paper-plane" />

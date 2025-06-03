@@ -7,7 +7,7 @@ import BarraEsquerda from "../Componentes/BarraEsquerda/page";
 import { getAllCategories, CategoriaData } from "../API/Categorias/PostCategorias";
 import { getPostsByCategory } from "../API/Posts/GetPostCategory/GetPostCategory";
 import { CategoriaCard } from "./styles";
-import { PostData } from "../API/Posts/GetPosts/GetPostsAPI";
+
 
 export default function Categorias() {
   const [categorias, setCategorias] = useState<CategoriaData[]>([]);
