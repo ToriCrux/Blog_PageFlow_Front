@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import Head from "next/head";
+import { Suspense } from "react"; // ✅ IMPORTANTE
+
 import NavBar from "../Componentes/NavBar/page";
 import BarraEsquerda from "../Componentes/BarraEsquerda/page";
 import CriarPost from "../Componentes/CriarPost/page";
 import PostContainer from "../Componentes/Posts/PostContainer";
-import { Poppins } from "next/font/google";
-
-export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
+import { poppins } from "../fonts";
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,6 +22,7 @@ export default function Home() {
 
       <NavBar />
       <BarraEsquerda />
+
       <main className="pt-20 pl-20 pr-4">
         <div className="max-w-2xl mx-auto">
           <CriarPost />
@@ -37,7 +38,10 @@ export default function Home() {
             />
           </div>
 
-          <PostContainer searchTerm={searchTerm} />
+          {/* ✅ ENVOLVER COM SUSPENSE */}
+          <Suspense fallback={<div>Carregando posts...</div>}>
+            <PostContainer searchTerm={searchTerm} />
+          </Suspense>
         </div>
       </main>
     </>

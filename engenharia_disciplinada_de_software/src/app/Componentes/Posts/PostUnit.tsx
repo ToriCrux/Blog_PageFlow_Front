@@ -17,11 +17,8 @@ import {
 } from "./styles";
 
 import { useState, ChangeEvent } from "react";
-import { Montserrat, Poppins } from "next/font/google";
+import { poppins } from "../../fonts";
 import { PostData } from "@/app/API/Posts/GetPosts/GetPostsAPI";
-
-export const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
-export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
 
 type Props = {
   post: PostData;

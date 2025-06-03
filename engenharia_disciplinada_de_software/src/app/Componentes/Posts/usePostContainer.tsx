@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 
 import { getAllPosts, PostData } from "../../API/Posts/GetPosts/GetPostsAPI";
 import { deletePostById } from "../../API/Posts/DeletePost/DeletePost";
@@ -10,15 +9,13 @@ import { postComment } from "../../API/Comments/PostComents/PostComentsAPI";
 import { getPostsByCategory } from "../../API/Posts/GetPostCategory/GetPostCategory";
 import { parseJwt } from "./parseJwt";
 
-export function usePostContainer() {
+export function usePostContainer(categoryName?: string) {
   const [posts, setPosts] = useState<PostData[]>([]);
   const [userId, setUserId] = useState<number | null>(null);
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
   const [editedTitle, setEditedTitle] = useState("");
   const [editedContent, setEditedContent] = useState("");
   const [commentInput, setCommentInput] = useState<Record<number, string>>({});
-  const searchParams = useSearchParams();
-  const categoryName = searchParams.get("category");
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   PostWrapper,
   PostHeader,
@@ -16,21 +18,20 @@ import {
   TextareaStyled,
 } from "./styles";
 
-import { Montserrat, Poppins } from "next/font/google";
+import { poppins } from "../../fonts";
 import { usePostContainer } from "./usePostContainer";
-import { useState } from "react";
 import DOMPurify from "dompurify";
 
 const purifier = DOMPurify as unknown as { sanitize: (dirty: string) => string };
-
-export const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
-export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
 
 type PostContainerProps = {
   searchTerm: string;
 };
 
 export default function PostContainer({ searchTerm }: PostContainerProps) {
+  const searchParams = useSearchParams();
+  const category = searchParams.get("category") || undefined;
+
   const {
     posts,
     userId,
@@ -45,7 +46,7 @@ export default function PostContainer({ searchTerm }: PostContainerProps) {
     handleEdit,
     handleSubmitEdit,
     handleCommentSubmit,
-  } = usePostContainer();
+  } = usePostContainer(category);
 
   const [visibleComments, setVisibleComments] = useState<Record<number, boolean>>({});
 
@@ -94,16 +95,12 @@ export default function PostContainer({ searchTerm }: PostContainerProps) {
               <>
                 <InputStyled
                   value={editedTitle}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setEditedTitle(e.target.value)
-                  }
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditedTitle(e.target.value)}
                   className="w-full p-2 mb-4 border border-gray-300 rounded-md"
                 />
                 <TextareaStyled
                   value={editedContent}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                    setEditedContent(e.target.value)
-                  }
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditedContent(e.target.value)}
                   className="w-full p-2 mb-4 border border-gray-300 rounded-md"
                 />
               </>

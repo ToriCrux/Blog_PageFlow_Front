@@ -8,14 +8,12 @@ import {
   SendButton,
 } from "./styles";
 
-import { Montserrat, Poppins } from "next/font/google";
+
 import { useCriarPost } from "./useCriarPost";
 import TinyEditorWrapper from "./TinyEditorWrapper";
 
+import { poppins } from "../../fonts";
 
-
-export const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700"] });
-export const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
 
 export default function CriarPost() {
   const {
